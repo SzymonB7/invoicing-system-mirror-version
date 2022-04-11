@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
-import pl.futurecollars.invoicing.model.Invoice;
 
 @Service
 public class JsonService {
@@ -26,9 +25,9 @@ public class JsonService {
     }
   }
 
-  public Invoice readJsonAsInvoice(String invoiceAsJson) {
+  public <T> T readJsonAsObject(String invoiceAsJson, Class<T> clazz) {
     try {
-      return objectMapper.readValue(invoiceAsJson, Invoice.class);
+      return objectMapper.readValue(invoiceAsJson, clazz);
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Failed to parse JSON", e);
     }

@@ -17,7 +17,7 @@ class JsonServiceTest extends Specification {
         when:
         String invoiceAsJson = jsonService.writeInvoiceAsJson(invoice)
         and:
-        Invoice invoiceReadBackFromJson = jsonService.readJsonAsInvoice(invoiceAsJson)
+        Invoice invoiceReadBackFromJson = jsonService.readJsonAsObject(invoiceAsJson, Invoice)
         then:
         invoice == invoiceReadBackFromJson
     }

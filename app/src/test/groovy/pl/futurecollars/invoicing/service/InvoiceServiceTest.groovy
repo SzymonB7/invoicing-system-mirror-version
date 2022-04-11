@@ -1,13 +1,8 @@
 package pl.futurecollars.invoicing.service
 
 import pl.futurecollars.invoicing.db.Database
-import pl.futurecollars.invoicing.model.Company
 import pl.futurecollars.invoicing.model.Invoice
-import pl.futurecollars.invoicing.model.InvoiceEntry
-import pl.futurecollars.invoicing.model.Vat
 import spock.lang.Specification
-
-import java.time.LocalDate
 
 class InvoiceServiceTest extends Specification {
 

@@ -40,7 +40,7 @@ public class FileBasedDatabase implements Database {
       String line;
       while ((line = bufferedReader.readLine()) != null) {
         if (line.contains("\"id\"" + ":" + id)) {
-          return Optional.of(jsonService.readJsonAsInvoice(line));
+          return Optional.of(jsonService.readJsonAsObject(line, Invoice.class));
         }
 
       }
@@ -57,7 +57,7 @@ public class FileBasedDatabase implements Database {
     try {
       return fileService.readAllLines(databasePath)
           .stream()
-          .map(jsonService::readJsonAsInvoice)
+          .map(line -> jsonService.readJsonAsObject(line, Invoice.class))
           .collect(Collectors.toList());
     } catch (IOException e) {
       throw new RuntimeException("Failed to get a list of invoices from file");

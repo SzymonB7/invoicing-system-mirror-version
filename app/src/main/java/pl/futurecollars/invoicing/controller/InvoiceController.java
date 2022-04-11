@@ -24,7 +24,7 @@ public class InvoiceController {
     this.invoiceService = invoiceService;
   }
 
-  @PostMapping
+  @PostMapping(produces = {"application/json;charset=UTF-8"})
   public Integer save(@RequestBody Invoice invoice) {
     return invoiceService.save(invoice);
   }
@@ -46,7 +46,7 @@ public class InvoiceController {
   public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Invoice updatedInvoice) {
     try {
       invoiceService.update(id, updatedInvoice);
-      return ResponseEntity.ok().build();
+      return ResponseEntity.noContent().build();
     } catch (InvoiceNotFoundException exception) {
       return ResponseEntity.notFound().build();
     }
@@ -56,7 +56,7 @@ public class InvoiceController {
   public ResponseEntity<?> delete(@PathVariable Integer id) {
     try {
       invoiceService.delete(id);
-      return ResponseEntity.ok().build();
+      return ResponseEntity.noContent().build();
     } catch (InvoiceNotFoundException exception) {
       return ResponseEntity.notFound().build();
     }
