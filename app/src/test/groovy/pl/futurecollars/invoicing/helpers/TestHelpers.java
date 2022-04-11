@@ -31,7 +31,7 @@ public class TestHelpers {
   public static InvoiceEntry product(int id) {
     return InvoiceEntry.builder().description("Windows " + id)
         .quantity(1)
-        .price(BigDecimal.valueOf(id * 100))
+        .price(BigDecimal.valueOf(id * 100L))
         .vatValue(BigDecimal.valueOf(100 * 0.08)).vatRate(Vat.VAT_8)
         .build();
   }

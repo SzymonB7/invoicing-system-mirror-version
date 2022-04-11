@@ -23,7 +23,7 @@ public class FileBasedDatabase implements Database {
   public Integer save(Invoice invoice) {
     try {
       invoice.setId(idService.getNextIdAndIncrement());
-      String invoiceAsJson = jsonService.writeInvoiceAsJson(invoice);
+      String invoiceAsJson = jsonService.writeObjectAsJson(invoice);
       fileService.appendLineToFile(databasePath, invoiceAsJson);
       return invoice.getId();
     } catch (IOException e) {
@@ -69,7 +69,7 @@ public class FileBasedDatabase implements Database {
     try {
       List<String> invoicesInDatabase = fileService.readAllLines(databasePath);
       updatedInvoice.setId(id);
-      String updatedInvoiceAsJson = jsonService.writeInvoiceAsJson(updatedInvoice);
+      String updatedInvoiceAsJson = jsonService.writeObjectAsJson(updatedInvoice);
       invoicesInDatabase.set(id - 1, updatedInvoiceAsJson);
       fileService.overwriteLinesInFile(databasePath, invoicesInDatabase);
     } catch (IOException e) {

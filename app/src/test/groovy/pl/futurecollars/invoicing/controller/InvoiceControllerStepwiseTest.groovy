@@ -46,7 +46,7 @@ class InvoiceControllerStepwiseTest extends Specification {
 
     def "should add single invoice"() {
         given:
-        def invoiceAsJson = jsonService.writeInvoiceAsJson(invoice)
+        def invoiceAsJson = jsonService.writeObjectAsJson(invoice)
 
         when:
         def invoiceId = mockMvc.perform(MockMvcRequestBuilders.post("/invoices")
@@ -108,7 +108,7 @@ class InvoiceControllerStepwiseTest extends Specification {
         def modifiedInvoice = invoice
         modifiedInvoice.date = updateDate
 
-        def invoiceAsJson = jsonService.writeInvoiceAsJson(modifiedInvoice)
+        def invoiceAsJson = jsonService.writeObjectAsJson(modifiedInvoice)
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.put("/invoices/1")
@@ -150,4 +150,5 @@ class InvoiceControllerStepwiseTest extends Specification {
         mockMvc.perform(MockMvcRequestBuilders.get("/invoices/1"))
                 .andExpect(status().isNotFound())
     }
+
 }

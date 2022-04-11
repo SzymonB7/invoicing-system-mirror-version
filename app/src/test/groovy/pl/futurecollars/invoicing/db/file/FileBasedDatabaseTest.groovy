@@ -29,7 +29,7 @@ class FileBasedDatabaseTest extends Specification {
 
     def 'should save invoice with correct id in a correct file'() {
         given:
-        Invoice invoice = TestHelpers.invoice1
+        Invoice invoice = TestHelpers.invoice(1)
         when:
         fileBasedDatabase.save(invoice)
         then:

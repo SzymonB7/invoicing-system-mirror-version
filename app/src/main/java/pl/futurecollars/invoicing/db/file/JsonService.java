@@ -16,7 +16,7 @@ public class JsonService {
     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 
-  public String writeInvoiceAsJson(Object object) {
+  public String writeObjectAsJson(Object object) {
 
     try {
       return objectMapper.writeValueAsString(object);
