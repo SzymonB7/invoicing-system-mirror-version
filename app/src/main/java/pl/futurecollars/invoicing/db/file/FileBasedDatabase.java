@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,12 +71,20 @@ public class FileBasedDatabase implements Database {
       List<String> invoicesInDatabase = fileService.readAllLines(databasePath);
       updatedInvoice.setId(id);
       String updatedInvoiceAsJson = jsonService.writeObjectAsJson(updatedInvoice);
+      int invoicesUpdated = 0;
+      for (String invoice : invoicesInDatabase) {
+        if (invoice.contains("\"id\"" + ":" + id)) {
+          invoicesInDatabase.set(invoicesInDatabase.indexOf(invoice), updatedInvoiceAsJson);
+          invoicesUpdated++;
+        }
+      }
+      if (invoicesUpdated == 0) {
+        throw new InvoiceNotFoundException("Id" + id + "does not exist");
+      }
       invoicesInDatabase.set(id - 1, updatedInvoiceAsJson);
       fileService.overwriteLinesInFile(databasePath, invoicesInDatabase);
     } catch (IOException e) {
       throw new RuntimeException("Failed to update invoice id:" + id + "in database");
-    } catch (IndexOutOfBoundsException e) {
-      throw new InvoiceNotFoundException("Id" + id + "does not exist");
     }
   }
 
@@ -83,13 +92,21 @@ public class FileBasedDatabase implements Database {
   public void delete(Integer id) {
     try {
       List<String> invoicesInDatabase = fileService.readAllLines(databasePath);
-      invoicesInDatabase.remove(id - 1);
+      int invoicesRemoved = 0;
+      for (Iterator<String> iterator = invoicesInDatabase.iterator(); iterator.hasNext(); ) {
+        String invoice = iterator.next();
+        if (invoice.contains("\"id\"" + ":" + id)) {
+          iterator.remove();
+          invoicesRemoved++;
+        }
+      }
+      if (invoicesRemoved == 0) {
+        throw new InvoiceNotFoundException("Id" + id + "does not exist");
+      }
       fileService.overwriteLinesInFile(databasePath, invoicesInDatabase);
 
     } catch (IOException e) {
       throw new RuntimeException("Failed to delete invoice id:" + id + "from database");
-    } catch (IndexOutOfBoundsException e) {
-      throw new InvoiceNotFoundException("Id" + id + "does not exist");
     }
   }
 }
