@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import pl.futurecollars.invoicing.db.Database;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.model.InvoiceEntry;
+import pl.futurecollars.invoicing.model.TaxBill;
 
 @AllArgsConstructor
 public class TaxCalculatorService {
