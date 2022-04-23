@@ -1,22 +1,18 @@
 package pl.futurecollars.invoicing.controller;
 
 import java.util.List;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import pl.futurecollars.invoicing.exceptions.InvoiceNotFoundException;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.service.InvoiceService;
 
 @RestController
-@RequestMapping("invoices")
-public class InvoiceController {
+public class InvoiceController implements InvoiceApi {
 
   private final InvoiceService invoiceService;
 
@@ -24,25 +20,25 @@ public class InvoiceController {
     this.invoiceService = invoiceService;
   }
 
-  @PostMapping(produces = {"application/json;charset=UTF-8"})
+  @Override
   public Integer save(@RequestBody Invoice invoice) {
     return invoiceService.save(invoice);
   }
 
-  @GetMapping
+  @Override
   public List<Invoice> getAll() {
     return invoiceService.getAll();
 
   }
 
-  @GetMapping("/{id}")
+  @Override
   public ResponseEntity<Invoice> getById(@PathVariable Integer id) {
     return invoiceService.getById(id)
         .map(invoice -> ResponseEntity.ok().body(invoice))
         .orElse(ResponseEntity.notFound().build());
   }
 
-  @PutMapping("/{id}")
+  @Override
   public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Invoice updatedInvoice) {
     try {
       invoiceService.update(id, updatedInvoice);
@@ -52,7 +48,7 @@ public class InvoiceController {
     }
   }
 
-  @DeleteMapping("/{id}")
+  @Override
   public ResponseEntity<?> delete(@PathVariable Integer id) {
     try {
       invoiceService.delete(id);
@@ -60,5 +56,10 @@ public class InvoiceController {
     } catch (InvoiceNotFoundException exception) {
       return ResponseEntity.notFound().build();
     }
+  }
+
+  @Bean
+  public InternalResourceViewResolver defaultViewResolver() {
+    return new InternalResourceViewResolver();
   }
 }
