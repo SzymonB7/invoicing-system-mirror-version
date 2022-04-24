@@ -18,3 +18,4 @@ public class TaxBill {
   private final BigDecimal vatToPay;
 
 }
+
