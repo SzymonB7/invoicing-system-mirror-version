@@ -17,11 +17,14 @@ public class InvoiceEntry {
   private String description;
   @ApiModelProperty(value = "Number of items", required = true, example = "5")
   private int quantity;
-  @ApiModelProperty(value = "Product/service ner price", required = true, example = "1200.00")
-  private BigDecimal price;
-  @ApiModelProperty(value = "Product/service tax value", required = true, example = "1200.96")
-  private BigDecimal vatValue;
+  @ApiModelProperty(value = "Product/service net price", required = true, example = "1200.25")
+  private BigDecimal netPrice;
+  @ApiModelProperty(value = "Product/service tax value", required = true, example = "96.02")
+  @Builder.Default
+  private BigDecimal vatValue = BigDecimal.ZERO;
   @ApiModelProperty(value = "Tax rate", required = true)
   private Vat vatRate;
+  @ApiModelProperty(value = "Car this expense is related to, empty if expense is not related to car")
+  private Car carExpenseIsRelatedTo;
 
 }

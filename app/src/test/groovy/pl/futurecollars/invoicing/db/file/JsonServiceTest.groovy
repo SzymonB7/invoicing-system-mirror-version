@@ -13,7 +13,7 @@ class JsonServiceTest extends Specification {
 
     def "should write invoice to file and read it back to invoice"() {
         given:
-        Invoice invoice = TestHelpers.invoice1
+        Invoice invoice = TestHelpers.invoice(1)
         when:
         String invoiceAsJson = jsonService.writeObjectAsJson(invoice)
         and:

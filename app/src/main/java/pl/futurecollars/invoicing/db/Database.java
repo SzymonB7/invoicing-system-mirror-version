@@ -22,9 +22,9 @@ public interface Database {
   default BigDecimal visit(Predicate<Invoice> invoicePredicate,
                            Function<InvoiceEntry, BigDecimal> invoiceEntryToAmount) {
     return getAll().stream()
+        .filter(invoicePredicate)
         .flatMap(invoice -> invoice.getInvoiceEntries().stream())
         .map(invoiceEntryToAmount)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
-
 }

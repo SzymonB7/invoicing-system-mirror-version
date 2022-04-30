@@ -40,8 +40,8 @@ class FileBasedDatabaseTest extends Specification {
 
     def 'should get correct invoice by id and return empty optional if there is no invoice with given id'() {
         given:
-        Invoice invoice1 = TestHelpers.invoice1
-        Invoice invoice2 = TestHelpers.invoice2
+        Invoice invoice1 = TestHelpers.invoice(1)
+        Invoice invoice2 = TestHelpers.invoice(2)
         when:
         fileBasedDatabase.save(invoice1)
         fileBasedDatabase.save(invoice2)
@@ -55,9 +55,9 @@ class FileBasedDatabaseTest extends Specification {
 
     def 'should return list of invoices when getAll method is called'() {
         given:
-        Invoice invoice1 = TestHelpers.invoice1
-        Invoice invoice2 = TestHelpers.invoice2
-        Invoice invoice3 = TestHelpers.invoice3
+        Invoice invoice1 = TestHelpers.invoice(1)
+        Invoice invoice2 = TestHelpers.invoice(2)
+        Invoice invoice3 = TestHelpers.invoice(3)
         when:
         fileBasedDatabase.save(invoice3)
         fileBasedDatabase.save(invoice2)
@@ -68,9 +68,9 @@ class FileBasedDatabaseTest extends Specification {
 
     def 'should update correct invoice in database'() {
         given:
-        Invoice invoice1 = TestHelpers.invoice1
-        Invoice invoice2 = TestHelpers.invoice2
-        Invoice invoice3 = TestHelpers.invoice3
+        Invoice invoice1 = TestHelpers.invoice(1)
+        Invoice invoice2 = TestHelpers.invoice(2)
+        Invoice invoice3 = TestHelpers.invoice(3)
         when:
         fileBasedDatabase.save(invoice1)
         fileBasedDatabase.save(invoice2)
@@ -83,16 +83,16 @@ class FileBasedDatabaseTest extends Specification {
 
     def 'should throw an exception if given id does not exist when updating invoice'() {
         when:
-        fileBasedDatabase.update(2, TestHelpers.invoice1)
+        fileBasedDatabase.update(2, TestHelpers.invoice(1))
         then:
         thrown(InvoiceNotFoundException)
     }
 
     def 'should delete correct invoice'() {
         given:
-        Invoice invoice1 = TestHelpers.invoice1
-        Invoice invoice2 = TestHelpers.invoice2
-        Invoice invoice3 = TestHelpers.invoice3
+        Invoice invoice1 = TestHelpers.invoice(1)
+        Invoice invoice2 = TestHelpers.invoice(2)
+        Invoice invoice3 = TestHelpers.invoice(3)
         when:
         fileBasedDatabase.save(invoice1)
         fileBasedDatabase.save(invoice2)
