@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.futurecollars.invoicing.model.Invoice;
 
-@RequestMapping("invoices")
+@RequestMapping(value = "invoices", produces = {"application/json;charset=UTF-8"})
 @Api(tags = {"invoice-controller"})
 public interface InvoiceApi {
   @ApiOperation(value = "Add new invoice to the system")
-  @PostMapping(produces = {"application/json;charset=UTF-8"})
+  @PostMapping
   Integer save(@RequestBody Invoice invoice);
 
   @ApiOperation(value = "List all invoices in the system")
