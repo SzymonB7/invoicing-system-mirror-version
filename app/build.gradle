@@ -19,6 +19,7 @@ buildscript {
         springDependencyManagementVersion = '1.0.11.RELEASE'
         springFoxStarterVersion = '3.0.0'
         springFoxUiVersion = '3.0.0'
+        flywayVersion = '8.5.10'
 
     }
 }
@@ -26,6 +27,7 @@ buildscript {
 plugins {
     id 'application'
     id 'checkstyle'
+    id 'java'
     id 'groovy'
     id 'jacoco'
     id "io.freefair.lombok" version "${lombokVersion}"
@@ -40,14 +42,20 @@ repositories {
 dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+    runtimeOnly 'com.h2database:h2:2.1.212'
+    runtimeOnly 'org.postgresql:postgresql:42.2.19'
 
     implementation "com.google.guava:guava:${guavaVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabind}"
     implementation "com.fasterxml.jackson.datatype:${jacksonDataType}"
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-jdbc"
     implementation "io.springfox:springfox-boot-starter:${springFoxStarterVersion}"
     implementation "io.springfox:springfox-swagger-ui:${springFoxUiVersion}"
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
 
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
@@ -77,6 +85,21 @@ checkstyle {
     maxWarnings = 0
     maxErrors = 0
 }
+
+//task testWithFileDatabase(type: Test) {
+//    systemProperty 'spring.profiles.active', 'file'
+//}
+//
+//task testWithMemoryDatabase(type: Test) {
+//    systemProperty 'spring.profiles.active', 'memory'
+//}
+//
+//task testWithSqlDatabase(type: Test) {
+//    systemProperty 'spring.profiles.active', 'sql'
+//}
+//
+//check.dependsOn testWithFileDatabase
+//check.dependsOn testWithMemoryDatabase
 
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run

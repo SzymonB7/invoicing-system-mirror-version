@@ -8,17 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.futurecollars.invoicing.db.Database;
+import org.springframework.jdbc.core.JdbcTemplate;
 import pl.futurecollars.invoicing.db.file.FileBasedDatabase;
 import pl.futurecollars.invoicing.db.file.FileService;
 import pl.futurecollars.invoicing.db.file.IdService;
 import pl.futurecollars.invoicing.db.file.JsonService;
 import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
+import pl.futurecollars.invoicing.db.sql.SqlDatabase;
 
 @Slf4j
 @Configuration
 public class DatabaseConfiguration {
 
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "file")
   @Bean
   public IdService idService(
       FileService fileService,
@@ -48,5 +50,11 @@ public class DatabaseConfiguration {
   public Database inMemoryDatabase() {
     log.info("Using in-memory database");
     return new InMemoryDatabase();
+  }
+
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "sql")
+  @Bean
+  public Database sqlDatabase(JdbcTemplate jdbcTemplate) {
+    return new SqlDatabase(jdbcTemplate);
   }
 }

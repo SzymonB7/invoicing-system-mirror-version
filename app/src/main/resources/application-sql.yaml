@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/invoicing_mirror
+    username: postgres
+    password: Parapet
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+
+invoicng-system:
+  database: sql
