@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/invoicing_mirror
+    url: jdbc:postgresql://localhost:5432/invoicing_mirror2
     username: postgres
     password: Parapet
     driver-class-name: org.postgresql.Driver

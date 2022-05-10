@@ -40,7 +40,7 @@ public class FileBasedDatabase implements Database {
       BufferedReader bufferedReader = Files.newBufferedReader(databasePath);
       String line;
       while ((line = bufferedReader.readLine()) != null) {
-        if (line.contains("\"id\"" + ":" + id)) {
+        if (line.contains("\"id\"" + ":" + id + ",\"number\"")) {
           return Optional.of(jsonService.readJsonAsObject(line, Invoice.class));
         }
 
@@ -73,7 +73,7 @@ public class FileBasedDatabase implements Database {
       String updatedInvoiceAsJson = jsonService.writeObjectAsJson(updatedInvoice);
       int invoicesUpdated = 0;
       for (String invoice : invoicesInDatabase) {
-        if (invoice.contains("\"id\"" + ":" + id)) {
+        if (invoice.contains("\"id\"" + ":" + id + ",\"number\"")) {
           invoicesInDatabase.set(invoicesInDatabase.indexOf(invoice), updatedInvoiceAsJson);
           invoicesUpdated++;
         }
@@ -95,7 +95,7 @@ public class FileBasedDatabase implements Database {
       int invoicesRemoved = 0;
       for (Iterator<String> iterator = invoicesInDatabase.iterator(); iterator.hasNext(); ) {
         String invoice = iterator.next();
-        if (invoice.contains("\"id\"" + ":" + id)) {
+        if (invoice.contains("\"id\"" + ":" + id + ",\"number\"")) {
           iterator.remove();
           invoicesRemoved++;
         }

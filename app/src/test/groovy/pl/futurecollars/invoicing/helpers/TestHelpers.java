@@ -32,8 +32,8 @@ public class TestHelpers {
   public static Invoice invoice(int id) {
     return Invoice.builder()
         .date(LocalDate.now())
-        .sellerCompany(company(id))
-        .buyerCompany(company(id + 1))
+        .seller(company(id))
+        .buyer(company(id + 1))
         .invoiceEntries(List.of(product(id)))
         .build();
   }
