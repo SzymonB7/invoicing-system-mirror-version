@@ -11,11 +11,14 @@ logging:
         invoicing: WARN
         invoicing.db: DEBUG
 
-invoicing-system:
-  database: sql
 
 spring:
   profiles:
-    active: sql
+    active: memory
   flyway:
     enabled: false
+  security:
+    user:
+      name: Szymon
+      password: maslo
+
