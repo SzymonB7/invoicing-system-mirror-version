@@ -15,12 +15,12 @@ public class JpaDatabase implements Database {
   private final InvoiceRepository invoiceRepository;
 
   @Override
-  public Integer save(Invoice invoice) {
+  public Long save(Invoice invoice) {
     return invoiceRepository.save(invoice).getId();
   }
 
   @Override
-  public Optional<Invoice> getById(Integer id) {
+  public Optional<Invoice> getById(long id) {
     return invoiceRepository.findById(id);
   }
 
@@ -32,7 +32,7 @@ public class JpaDatabase implements Database {
   }
 
   @Override
-  public void update(Integer id, Invoice updatedInvoice) {
+  public void update(Long id, Invoice updatedInvoice) {
 
     Optional<Invoice> invoiceOptional = getById(id);
     if (invoiceOptional.isEmpty()) {
@@ -47,7 +47,7 @@ public class JpaDatabase implements Database {
   }
 
   @Override
-  public void delete(Integer id) {
+  public void delete(Long id) {
 
     Optional<Invoice> invoice = getById(id);
 

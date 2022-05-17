@@ -21,7 +21,7 @@ public class FileBasedDatabase implements Database {
   private final Path databasePath;
 
   @Override
-  public Integer save(Invoice invoice) {
+  public Long save(Invoice invoice) {
     try {
       invoice.setId(idService.getNextIdAndIncrement());
       String invoiceAsJson = jsonService.writeObjectAsJson(invoice);
@@ -33,7 +33,7 @@ public class FileBasedDatabase implements Database {
   }
 
   @Override
-  public Optional<Invoice> getById(Integer id) {
+  public Optional<Invoice> getById(long id) {
 
     try {
 
@@ -66,7 +66,7 @@ public class FileBasedDatabase implements Database {
   }
 
   @Override
-  public void update(Integer id, Invoice updatedInvoice) {
+  public void update(Long id, Invoice updatedInvoice) {
     try {
       List<String> invoicesInDatabase = fileService.readAllLines(databasePath);
       updatedInvoice.setId(id);
@@ -81,7 +81,7 @@ public class FileBasedDatabase implements Database {
       if (invoicesUpdated == 0) {
         throw new InvoiceNotFoundException("Id" + id + "does not exist");
       }
-      invoicesInDatabase.set(id - 1, updatedInvoiceAsJson);
+      invoicesInDatabase.set(id.intValue() - 1, updatedInvoiceAsJson);
       fileService.overwriteLinesInFile(databasePath, invoicesInDatabase);
     } catch (IOException e) {
       throw new RuntimeException("Failed to update invoice id:" + id + "in database");
@@ -89,7 +89,7 @@ public class FileBasedDatabase implements Database {
   }
 
   @Override
-  public void delete(Integer id) {
+  public void delete(Long id) {
     try {
       List<String> invoicesInDatabase = fileService.readAllLines(databasePath);
       int invoicesRemoved = 0;
