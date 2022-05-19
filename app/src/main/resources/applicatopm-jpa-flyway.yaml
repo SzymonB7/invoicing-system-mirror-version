@@ -7,9 +7,9 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   datasource:
     url: jdbc:postgresql://localhost:5432/invoicing_jpa_mirror
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    username: postgres
+    password: Parapet
+    driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
 

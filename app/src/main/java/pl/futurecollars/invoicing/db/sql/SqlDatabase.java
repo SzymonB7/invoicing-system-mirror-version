@@ -317,7 +317,6 @@ public class SqlDatabase implements Database {
       });
     });
 
-
   }
 
   private void updateCompany(Company buyer, Company buyer2) {

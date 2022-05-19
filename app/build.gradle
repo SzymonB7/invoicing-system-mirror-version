@@ -71,15 +71,15 @@ dependencies {
     testImplementation "junit:junit:${junitVersion}"
 }
 
-//testing {
-//    suites {
-//        // Configure the built-in test suite
-//        test {
-//            // Use Spock test framework
-//            useSpock('2.0-groovy-3.0')
-//        }
-//    }
-//}
+testing {
+    suites {
+        // Configure the built-in test suite
+        test {
+            // Use Spock test framework
+            useSpock('2.0-groovy-3.0')
+        }
+    }
+}
 
 application {
     // Define the main class for the application.

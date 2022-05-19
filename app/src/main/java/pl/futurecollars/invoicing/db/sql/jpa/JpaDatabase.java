@@ -38,9 +38,10 @@ public class JpaDatabase implements Database {
     if (invoiceOptional.isEmpty()) {
       throw new InvoiceNotFoundException("Id" + id + "does not exist");
     }
+    Invoice invoice = invoiceOptional.get();
     updatedInvoice.setId(id);
-    updatedInvoice.getBuyer().setId(id);
-    updatedInvoice.getSeller().setId(id);
+    updatedInvoice.getBuyer().setId(invoice.getBuyer().getId());
+    updatedInvoice.getSeller().setId(invoice.getSeller().getId());
 
     invoiceRepository.save(updatedInvoice);
 
