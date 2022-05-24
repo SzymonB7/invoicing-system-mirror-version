@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/invoicing_mirror2
-    username: postgres
-    password: Parapet
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   flyway:
     enabled: true
 

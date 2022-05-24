@@ -1,5 +1,6 @@
 package pl.futurecollars.invoicing.db.file
 
+import io.swagger.v3.oas.models.Paths
 import pl.futurecollars.invoicing.db.AbstractDatabaseTest
 import pl.futurecollars.invoicing.db.Database
 import pl.futurecollars.invoicing.exceptions.InvoiceNotFoundException
@@ -12,16 +13,18 @@ import java.nio.file.Path
 
 class FileBasedDatabaseIntegrationTest extends AbstractDatabaseTest {
 
-    private Path databasePath
+//    private Path databasePath
+    def fileService = new FileService()
+    def jsonService = new JsonService()
+    def databasePath = File.createTempFile("database","txt")
+    def idFilePath = File.createTempFile("ids","txt")
+    def idService = new IdService(Path.of(idFilePath.getPath()), fileService)
+//    def fileBasedDatabase =
 
     @Override
     Database getDatabaseInstance(){
-        def fileService = new FileService()
-        def jsonService = new JsonService()
-        def databasePath = File.createTempFile('lines', '.txt').toPath()
-        def idFilePath = File.createTempFile('idfile', '.txt').toPath()
-        def idService = new IdService(idFilePath, fileService)
-        new FileBasedDatabase(fileService, jsonService, idService, databasePath)
+        new FileBasedDatabase(fileService, jsonService, idService, Path.of(databasePath.getPath()))
+
     }
 
 
@@ -32,7 +35,7 @@ class FileBasedDatabaseIntegrationTest extends AbstractDatabaseTest {
         getDatabaseInstance().save(invoice)
         then:
         1 == invoice.getId()
-        1 == Files.readAllLines(databasePath).size()
+        1 == Files.readAllLines(Path.of(databasePath.getPath())).size()
         Optional.of(invoice) == getDatabaseInstance().getById(1)
     }
 }

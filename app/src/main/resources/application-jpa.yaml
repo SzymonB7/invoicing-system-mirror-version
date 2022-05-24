@@ -6,10 +6,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL94Dialect
   datasource:
-    url: jdbc:postgresql://localhost:5432/invoicing_jpa_mirror
-    username: postgres
-    password: Parapet
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:db-jpa;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
 invoicing-system:
   database: jpa

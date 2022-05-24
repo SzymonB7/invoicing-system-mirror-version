@@ -7,9 +7,9 @@ import spock.lang.Specification
 
 abstract class AbstractDatabaseTest extends Specification{
 
-    Invoice invoice1 = TestHelpers.invoice(1)
-    Invoice invoice2 = TestHelpers.invoice(2)
-    Invoice invoice3 = TestHelpers.invoice(3)
+    Invoice invoice1 = TestHelpers.invoice(1L)
+    Invoice invoice2 = TestHelpers.invoice(2L)
+    Invoice invoice3 = TestHelpers.invoice(3L)
     abstract Database getDatabaseInstance()
     Database database
 
@@ -23,27 +23,30 @@ abstract class AbstractDatabaseTest extends Specification{
     }
 
     def "should save invoice into a database with correct id"() {
+        database.reset()
         when:
-        database.save(invoice2)
-        database.save(invoice1)
+        def id1 = database.save(invoice2)
+        def id2 = database.save(invoice1)
         then:
-        invoice2.getId() == 1
-        invoice1.getId() == 2
+        id1 == 1
+        id2 == 2
     }
 
     def 'should get correct invoice by id and return empty optional if there is no invoice with given id'() {
+        database.reset()
         when:
         database.save(invoice1)
-        database.save(invoice2)
+//        database.save(invoice2)
         then:
         Optional.of(invoice1) == database.getById(1)
-        Optional.of(invoice2) == database.getById(2)
+//        Optional.of(invoice2) == database.getById(2)
         and:
         database.getById(4) == Optional.empty()
 
     }
 
     def 'should return list of invoices when getAll method is called'() {
+        database.reset()
         when:
         database.save(invoice3)
         database.save(invoice2)
@@ -53,6 +56,7 @@ abstract class AbstractDatabaseTest extends Specification{
     }
 
     def 'should update correct invoice in database'() {
+        database.reset()
         when:
         database.save(invoice1)
         database.save(invoice2)
@@ -64,6 +68,7 @@ abstract class AbstractDatabaseTest extends Specification{
     }
 
     def 'should throw an exception if given id does not exist when updating invoice'() {
+        database.reset()
         when:
         database.update(2, invoice1)
         then:
@@ -71,6 +76,7 @@ abstract class AbstractDatabaseTest extends Specification{
     }
 
     def 'should delete correct invoice'() {
+        database.reset()
         when:
         database.save(invoice1)
         database.save(invoice2)
@@ -83,6 +89,7 @@ abstract class AbstractDatabaseTest extends Specification{
     }
 
     def 'should throw an exception if given id does not exist when deleting invoice'() {
+        database.reset()
         when:
         database.delete(2)
         then:

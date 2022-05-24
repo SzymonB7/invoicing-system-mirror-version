@@ -23,19 +23,19 @@ import pl.futurecollars.invoicing.model.Vat;
 public class SqlDatabase implements Database {
 
   private JdbcTemplate jdbcTemplate;
-  private final Map<Vat, Integer> vatToId = new HashMap<>();
-  private final Map<Integer, Vat> idToVat = new HashMap<>();
-
-  @PostConstruct
-  void initVatRatesMap() {
-    jdbcTemplate.query("select * from vat",
-        rs -> {
-          Vat vat = Vat.valueOf("VAT_" + rs.getString("name"));
-          int id = rs.getInt("id");
-          vatToId.put(vat, id);
-          idToVat.put(id, vat);
-        });
-  }
+//  private final Map<Vat, Integer> vatToId = new HashMap<>();
+//  private final Map<Integer, Vat> idToVat = new HashMap<>();
+//
+//  @PostConstruct
+//  void initVatRatesMap() {
+//    jdbcTemplate.query("select * from vat",
+//        rs -> {
+//          Vat vat = Vat.valueOf("VAT_" + rs.getString("name"));
+//          int id = rs.getInt("id");
+//          vatToId.put(vat, id);
+//          idToVat.put(id, vat);
+//        });
+//  }
 
   private Long insertCarAndGetItsId(Car car) {
     if (car == null) {
@@ -109,7 +109,7 @@ public class SqlDatabase implements Database {
         ps.setInt(2, invoiceEntry.getQuantity());
         ps.setBigDecimal(3, invoiceEntry.getNetPrice());
         ps.setBigDecimal(4, invoiceEntry.getVatValue());
-        ps.setInt(5, vatToId.get(invoiceEntry.getVatRate()));
+        ps.setString(5, invoiceEntry.getVatRate().name());
         ps.setObject(6, insertCarAndGetItsId(invoiceEntry.getCarExpenseIsRelatedTo()));
         return ps;
       }, keyHolder);
@@ -137,10 +137,10 @@ public class SqlDatabase implements Database {
         + "from invoice i "
         + "inner join company c1 on i.seller = c1.id "
         + "inner join company c2 on i.buyer = c2.id " + "where i.id = " + id, (rs, rowNr) -> {
-        int invoiceId = rs.getInt("id");
+      int invoiceId = rs.getInt("id");
 
-        List<InvoiceEntry> invoiceEntries = jdbcTemplate.query(
-            "select * from invoice_invoice_entry iie"
+      List<InvoiceEntry> invoiceEntries = jdbcTemplate.query(
+          "select * from invoice_invoice_entry iie"
               + " inner join invoice_entry e on iie.invoice_entry_id = e.id"
               + " left outer join car c on e.car_expense_is_related_to = c.id"
               + " where invoice_id = " + invoiceId, (response, ignored) -> InvoiceEntry.builder()
@@ -149,7 +149,7 @@ public class SqlDatabase implements Database {
               .quantity(response.getInt("quantity"))
               .netPrice(response.getBigDecimal("net_price"))
               .vatValue(response.getBigDecimal("vat_value"))
-              .vatRate(idToVat.get(response.getInt("vat_rate")))
+              .vatRate(Vat.valueOf(response.getString("vat_rate")))
               .carExpenseIsRelatedTo(response.getObject("registration_number") != null
                   ? Car.builder()
                   .registrationNumber(response.getString("registration_number"))
@@ -158,7 +158,7 @@ public class SqlDatabase implements Database {
                   : null)
               .build());
 
-        return Invoice.builder()
+      return Invoice.builder()
           .id(rs.getLong("id"))
           .date(rs.getDate("date").toLocalDate())
           .number(rs.getString("number"))
@@ -183,7 +183,7 @@ public class SqlDatabase implements Database {
           .invoiceEntries(invoiceEntries)
           .build();
 
-      });
+    });
 
     return invoices.isEmpty() ? Optional.empty() : Optional.of(invoices.get(0));
   }
@@ -211,7 +211,7 @@ public class SqlDatabase implements Database {
                   .quantity(response.getInt("quantity"))
                   .netPrice(response.getBigDecimal("net_price"))
                   .vatValue(response.getBigDecimal("vat_value"))
-                  .vatRate(idToVat.get(response.getInt("vat_rate")))
+                  .vatRate(Vat.valueOf(response.getString("vat_rate")))
                   .carExpenseIsRelatedTo(response.getObject("registration_number") != null
                       ? Car.builder()
                       .registrationNumber(response.getString("registration_number"))
@@ -301,7 +301,7 @@ public class SqlDatabase implements Database {
         ps.setInt(2, entry.getQuantity());
         ps.setBigDecimal(3, entry.getNetPrice());
         ps.setBigDecimal(4, entry.getVatValue());
-        ps.setInt(5, vatToId.get(entry.getVatRate()));
+        ps.setString(5, entry.getVatRate().name());
         ps.setObject(6, insertCarAndGetItsId(entry.getCarExpenseIsRelatedTo()));
         return ps;
       }, keyHolder);
