@@ -1,0 +1,17 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/invoicing_jpa_mirror
+    username: postgres
+    password: Parapet
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+
+invoicing-system:
+  database: jpa

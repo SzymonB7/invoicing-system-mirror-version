@@ -8,18 +8,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.futurecollars.invoicing.db.Database;
+import org.springframework.jdbc.core.JdbcTemplate;
 import pl.futurecollars.invoicing.db.file.FileBasedDatabase;
 import pl.futurecollars.invoicing.db.file.FileService;
 import pl.futurecollars.invoicing.db.file.IdService;
 import pl.futurecollars.invoicing.db.file.JsonService;
 import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
+import pl.futurecollars.invoicing.db.sql.SqlDatabase;
+import pl.futurecollars.invoicing.db.sql.jpa.InvoiceRepository;
+import pl.futurecollars.invoicing.db.sql.jpa.JpaDatabase;
 
 @Slf4j
 @Configuration
 public class DatabaseConfiguration {
 
   @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "file")
   public IdService idService(
       FileService fileService,
       @Value("${invoicing-system.database.directory}") String databaseDirectory,
@@ -29,8 +33,8 @@ public class DatabaseConfiguration {
     return new IdService(idFilePath, fileService);
   }
 
-  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "file")
   @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "file")
   public Database fileBasedDatabase(
       IdService idService,
       FileService fileservice,
@@ -43,10 +47,22 @@ public class DatabaseConfiguration {
     return new FileBasedDatabase(fileservice, jsonService, idService, databaseFilePath);
   }
 
-  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "memory")
   @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "memory")
   public Database inMemoryDatabase() {
     log.info("Using in-memory database");
     return new InMemoryDatabase();
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "sql")
+  public Database sqlDatabase(JdbcTemplate jdbcTemplate) {
+    return new SqlDatabase(jdbcTemplate);
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "jpa")
+  public Database jpaDatabase(InvoiceRepository invoiceRepository) {
+    return new JpaDatabase(invoiceRepository);
   }
 }

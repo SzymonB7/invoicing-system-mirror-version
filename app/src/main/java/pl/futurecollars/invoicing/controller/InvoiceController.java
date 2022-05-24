@@ -21,7 +21,7 @@ public class InvoiceController implements InvoiceApi {
   }
 
   @Override
-  public Integer save(@RequestBody Invoice invoice) {
+  public Long add(@RequestBody Invoice invoice) {
     return invoiceService.save(invoice);
   }
 
@@ -32,14 +32,14 @@ public class InvoiceController implements InvoiceApi {
   }
 
   @Override
-  public ResponseEntity<Invoice> getById(@PathVariable Integer id) {
+  public ResponseEntity<Invoice> getById(@PathVariable Long id) {
     return invoiceService.getById(id)
         .map(invoice -> ResponseEntity.ok().body(invoice))
         .orElse(ResponseEntity.notFound().build());
   }
 
   @Override
-  public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Invoice updatedInvoice) {
+  public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Invoice updatedInvoice) {
     try {
       invoiceService.update(id, updatedInvoice);
       return ResponseEntity.noContent().build();
@@ -49,7 +49,7 @@ public class InvoiceController implements InvoiceApi {
   }
 
   @Override
-  public ResponseEntity<?> delete(@PathVariable Integer id) {
+  public ResponseEntity<?> delete(@PathVariable Long id) {
     try {
       invoiceService.delete(id);
       return ResponseEntity.noContent().build();

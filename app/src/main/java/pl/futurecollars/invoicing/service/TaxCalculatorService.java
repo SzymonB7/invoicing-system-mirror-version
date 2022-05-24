@@ -17,11 +17,11 @@ public class TaxCalculatorService {
   private final Database database;
 
   public Predicate<Invoice> buyerPredicate(String taxIdentificationNumber) {
-    return invoice -> invoice.getBuyerCompany().getTaxIdentificationNumber().equals(taxIdentificationNumber);
+    return invoice -> invoice.getBuyer().getTaxIdentificationNumber().equals(taxIdentificationNumber);
   }
 
   public Predicate<Invoice> sellerPredicate(String taxIdentificationNumber) {
-    return invoice -> invoice.getSellerCompany().getTaxIdentificationNumber().equals(taxIdentificationNumber);
+    return invoice -> invoice.getSeller().getTaxIdentificationNumber().equals(taxIdentificationNumber);
   }
 
   public BigDecimal calculateVatValue(InvoiceEntry invoiceEntry) {
@@ -75,7 +75,7 @@ public class TaxCalculatorService {
         .costs(calculateCosts(taxIdentificationNumber))
         .incomeMinusCosts(calculateEarnings(taxIdentificationNumber))
         .pensionInsurance(company.getPensionInsurance())
-        .incomeMinusCostsMinusPensionIsurance(incomeMinusCostsMinusPensionInsurance)
+        .incomeMinusCostsMinusPensionInsurance(incomeMinusCostsMinusPensionInsurance)
         .taxCalculationBase(taxCalculationBase)
         .incomeTax(taxCalculationBase.multiply(BigDecimal.valueOf(19, 2)))
         .healthInsuranceFull(company.getHealthInsurance())
