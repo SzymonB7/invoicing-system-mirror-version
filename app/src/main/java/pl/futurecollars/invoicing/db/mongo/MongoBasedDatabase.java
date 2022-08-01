@@ -13,7 +13,9 @@ import pl.futurecollars.invoicing.model.Invoice;
 
 @AllArgsConstructor
 public class MongoBasedDatabase implements Database {
-  private MongoCollection<Invoice> collection;
+
+  private final MongoCollection<Invoice> collection;
+  private final MongoIdProvider mongoIdProvider;
 
   @Override
   public Long save(Invoice invoice) {

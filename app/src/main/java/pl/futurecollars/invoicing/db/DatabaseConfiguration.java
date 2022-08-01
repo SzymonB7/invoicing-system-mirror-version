@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import pl.futurecollars.invoicing.db.file.IdService;
 import pl.futurecollars.invoicing.db.file.JsonService;
 import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
 import pl.futurecollars.invoicing.db.mongo.MongoBasedDatabase;
+import pl.futurecollars.invoicing.db.mongo.MongoIdProvider;
 import pl.futurecollars.invoicing.db.sql.SqlDatabase;
 import pl.futurecollars.invoicing.db.sql.jpa.InvoiceRepository;
 import pl.futurecollars.invoicing.db.sql.jpa.JpaDatabase;
@@ -80,19 +82,38 @@ public class DatabaseConfiguration {
 
   @Bean
   @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "mongo")
-  public Database mongoDatabase (
-      @Value("${invoicing-system.database.name}") String databaseName,
-      @Value("${invoicing-system.database.collection}") String collectionName
+  public MongoDatabase mongoDb (
+      @Value("${invoicing-system.database.name}") String databaseName
   ) {
     CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
         fromProviders(PojoCodecProvider.builder().automatic(true).build()));
     MongoClientSettings settings = MongoClientSettings.builder()
         .codecRegistry(pojoCodecRegistry)
         .build();
-
     MongoClient client = MongoClients.create(settings);
-    MongoDatabase database = client.getDatabase(databaseName);
-    MongoCollection<Invoice> collection = database.getCollection(collectionName, Invoice.class);
-    return new MongoBasedDatabase(collection);
+    return client.getDatabase(databaseName);
+  }
+
+
+  @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "mongo")
+  public MongoIdProvider mongoIdProvider (
+      @Value("${invoicing-system.database.counter.collection}") String collectionName,
+      MongoDatabase mongoDb
+  ) {
+    MongoCollection<Document> collection = mongoDb.getCollection(collectionName);
+    return new MongoIdProvider(collection);
+  }
+
+
+  @Bean
+  @ConditionalOnProperty(name = "invoicing-system.database", havingValue = "mongo")
+  public Database mongoDatabase (
+      @Value("${invoicing-system.database.collection}") String collectionName,
+      MongoDatabase mongoDb,
+      MongoIdProvider mongoIdProvider
+  ) {
+    MongoCollection<Invoice> collection = mongoDb.getCollection(collectionName, Invoice.class);
+    return new MongoBasedDatabase(collection, mongoIdProvider);
   }
 }

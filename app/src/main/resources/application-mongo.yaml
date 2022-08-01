@@ -2,3 +2,4 @@ invoicing-system:
   database: mongo
   database.name: invoicesMirror
   database.collection: invoicesMirror
+  database.counter.collection: counter
