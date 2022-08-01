@@ -23,19 +23,6 @@ import pl.futurecollars.invoicing.model.Vat;
 public class SqlDatabase implements Database {
 
   private JdbcTemplate jdbcTemplate;
-//  private final Map<Vat, Integer> vatToId = new HashMap<>();
-//  private final Map<Integer, Vat> idToVat = new HashMap<>();
-//
-//  @PostConstruct
-//  void initVatRatesMap() {
-//    jdbcTemplate.query("select * from vat",
-//        rs -> {
-//          Vat vat = Vat.valueOf("VAT_" + rs.getString("name"));
-//          int id = rs.getInt("id");
-//          vatToId.put(vat, id);
-//          idToVat.put(id, vat);
-//        });
-//  }
 
   private Long insertCarAndGetItsId(Car car) {
     if (car == null) {

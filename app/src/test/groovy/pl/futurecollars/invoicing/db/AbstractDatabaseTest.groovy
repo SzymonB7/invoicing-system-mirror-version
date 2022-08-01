@@ -36,10 +36,12 @@ abstract class AbstractDatabaseTest extends Specification{
         database.reset()
         when:
         database.save(invoice1)
-//        database.save(invoice2)
+        database.save(invoice2)
+        invoice2.getBuyer().setId(3)
+        invoice2.getSeller().setId(4)
         then:
         Optional.of(invoice1) == database.getById(1)
-//        Optional.of(invoice2) == database.getById(2)
+        Optional.of(invoice2) == database.getById(2)
         and:
         database.getById(4) == Optional.empty()
 
@@ -48,11 +50,15 @@ abstract class AbstractDatabaseTest extends Specification{
     def 'should return list of invoices when getAll method is called'() {
         database.reset()
         when:
-        database.save(invoice3)
-        database.save(invoice2)
         database.save(invoice1)
+        database.save(invoice2)
+        database.save(invoice3)
+        invoice2.getBuyer().setId(3)
+        invoice2.getSeller().setId(4)
+        invoice3.getBuyer().setId(5)
+        invoice3.getSeller().setId(6)
         then:
-        [invoice3, invoice2, invoice1] == database.getAll()
+        [invoice1, invoice2, invoice3] == database.getAll()
     }
 
     def 'should update correct invoice in database'() {
@@ -62,6 +68,7 @@ abstract class AbstractDatabaseTest extends Specification{
         database.save(invoice2)
         and:
         database.update(2, invoice3)
+        invoice3.setId(2)
         then:
         Optional.of(invoice3) == database.getById(2)
         database.getAll().size() == 2
@@ -81,6 +88,8 @@ abstract class AbstractDatabaseTest extends Specification{
         database.save(invoice1)
         database.save(invoice2)
         database.save(invoice3)
+        invoice3.getBuyer().setId(5)
+        invoice3.getSeller().setId(6)
         and:
         database.delete(2)
         then:

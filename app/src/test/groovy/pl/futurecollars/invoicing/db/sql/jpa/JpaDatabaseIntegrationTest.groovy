@@ -6,7 +6,7 @@ import org.springframework.test.annotation.IfProfileValue
 import pl.futurecollars.invoicing.db.AbstractDatabaseTest
 import pl.futurecollars.invoicing.db.Database
 
-//@DataJpaTest
+@DataJpaTest
 @IfProfileValue(name = "spring.profiles.active", value = "jpa")
 class JpaDatabaseIntegrationTest extends AbstractDatabaseTest{
     @Autowired

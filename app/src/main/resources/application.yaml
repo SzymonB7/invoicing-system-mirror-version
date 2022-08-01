@@ -14,7 +14,7 @@ logging:
 
 spring:
   profiles:
-    active: jpa
+    active: memory
   flyway:
     enabled: false
   security:
