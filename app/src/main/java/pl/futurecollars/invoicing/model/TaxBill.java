@@ -16,7 +16,7 @@ public class TaxBill {
   private BigDecimal costs;
   private BigDecimal incomeMinusCosts;
   private BigDecimal pensionInsurance;
-  private BigDecimal incomeMinusCostsMinusPensionIsurance;
+  private BigDecimal incomeMinusCostsMinusPensionInsurance;
   private BigDecimal taxCalculationBase;
   private BigDecimal incomeTax;
   private BigDecimal healthInsuranceFull;
@@ -29,4 +29,3 @@ public class TaxBill {
   private BigDecimal vatToPay;
 
 }
-

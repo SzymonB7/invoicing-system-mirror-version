@@ -10,18 +10,18 @@ import pl.futurecollars.invoicing.exceptions.InvoiceNotFoundException;
 import pl.futurecollars.invoicing.model.Invoice;
 
 public class InMemoryDatabase implements Database {
-  private final Map<Integer, Invoice> invoices = new HashMap<>();
-  private Integer nextId = 1;
+  private final Map<Long, Invoice> invoices = new HashMap<Long, Invoice>();
+  private Long nextId = 1L;
 
   @Override
-  public Integer save(Invoice invoice) {
+  public Long save(Invoice invoice) {
     invoice.setId(nextId);
     invoices.put(nextId, invoice);
     return nextId++;
   }
 
   @Override
-  public Optional<Invoice> getById(Integer id) {
+  public Optional<Invoice> getById(long id) {
     return Optional.ofNullable(invoices.get(id));
   }
 
@@ -31,7 +31,7 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public void update(Integer id, Invoice updatedInvoice) {
+  public void update(Long id, Invoice updatedInvoice) {
     if (!invoices.containsKey(id)) {
       throw new InvoiceNotFoundException("Id " + id + " does not exist");
     }
@@ -40,7 +40,7 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public void delete(Integer id) {
+  public void delete(Long id) {
     if (!invoices.containsKey(id)) {
       throw new InvoiceNotFoundException("Id " + id + " does not exist");
     }
